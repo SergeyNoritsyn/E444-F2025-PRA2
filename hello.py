@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/') # specifies URL path/endpoint that triggers this function
 def index(): # function that runs when the endpoint is accessed
-    return '<h1>Hello World!</h1>' # returns HTML content/response
+    return render_template('index.html') # returns HTML content in a Jinja2 template
 
 @app.route('/user/<name>') # dynamic route with variable component
 def user(name):
-    return '<h1>Hello, {}!</h1>'.format(name)
+    return render_template('user.html', name=name)
