@@ -2,7 +2,10 @@ from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
-from datetime import datetime
+from datetime import datetime, timezone
+from flask_moment import Moment
+moment = Moment(app)
+
 
 @app.route('/') # specifies URL path/endpoint that triggers this function
 def index(): # function that runs when the endpoint is accessed
@@ -10,14 +13,12 @@ def index(): # function that runs when the endpoint is accessed
 
 @app.route('/user/<name>') # dynamic route with variable component
 def user(name):
-    # Day suffix logic
-    dt = datetime.now()
-    day = dt.day
-    if 11 <= day <= 13:
-        suffix = "th"
-    else:
-        suffix = {1: "st", 2: "nd", 3: "rd"}.get(day % 10, "th")
-    
-    # Format: Weekday, Month DaySuffix, Year Hour:Minute am/pm
-    dt_now = dt.strftime(f"%A, %B {day}{suffix}, %Y %#I:%M %p")
-    return render_template('user.html', name=name, now=dt_now, timestamp = dt.timestamp())
+    return render_template('user.html', name=name, current_time=datetime.now(timezone.utc))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+# @app.errorhandler(500)
+# def internal_server_error(e):
+#     return render_template('500.html'), 500
