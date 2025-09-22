@@ -29,5 +29,40 @@
     <div class="page-header">
         <h1>Hello, {{ name }}!</h1>
     </div>
+    <div class="text">
+        <p>The local date and time is {{ now }}.</p>
+        <p id="timeago"></p>
+
+        <script>
+            // Get the timestamp Flask passed in (seconds since epoch)
+            const pastTime = new Date("{{ timestamp|tojson }}" * 1000);
+
+            function updateTimeAgo() {
+                const now = new Date();
+                let diff = Math.floor((now - pastTime) / 1000); // in seconds
+
+                let text;
+                if (diff < 60) {
+                    text = `${diff} second${diff !== 1 ? 's' : ''} ago`;
+                } else if (diff < 3600) {
+                    const minutes = Math.floor(diff / 60);
+                    text = `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+                } else if (diff < 86400) {
+                    const hours = Math.floor(diff / 3600);
+                    text = `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+                } else {
+                    const days = Math.floor(diff / 86400);
+                    text = `${days} day${days !== 1 ? 's' : ''} ago`;
+                }
+
+                document.getElementById("timeago").textContent =
+                    `That was ${text}`;
+            }
+
+            // Update immediately and then every second
+            updateTimeAgo();
+            setInterval(updateTimeAgo, 1000);
+        </script>
+    </div>
 </div>
 {% endblock %}
