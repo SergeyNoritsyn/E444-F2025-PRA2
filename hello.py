@@ -1,5 +1,7 @@
 from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 @app.route('/') # specifies URL path/endpoint that triggers this function
 def index(): # function that runs when the endpoint is accessed
