@@ -4,3 +4,7 @@ app = Flask(__name__)
 @app.route('/') # specifies URL path/endpoint that triggers this function
 def index(): # function that runs when the endpoint is accessed
     return '<h1>Hello World!</h1>' # returns HTML content/response
+
+@app.route('/user/<name>') # dynamic route with variable component
+def user(name):
+    return '<h1>Hello, {}!</h1>'.format(name)
